@@ -72,7 +72,12 @@ public class Main {
         });
 
         dsList.forEach(System.out::println);
-
+        System.out.println(dsList.size());
+        int tdays = 7, remDays = 0;
+        dsList.forEach(item -> {
+            System.out.println(item.id +" "+ (tdays-item.library.setupTime)* item.library.daily);
+            System.out.println(item.bookSet);
+        });
         
     }
 

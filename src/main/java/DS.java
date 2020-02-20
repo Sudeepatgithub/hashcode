@@ -1,10 +1,20 @@
+import java.util.Comparator;
 import java.util.TreeSet;
 
 public class DS {
 
     private String libStr;
     private String books;
-    TreeSet<Integer> bookSet = new TreeSet<>();
+    TreeSet<Book> bookSet = new TreeSet<>(new Comparator<Book>() {
+        @Override
+        public int compare(Book o1, Book o2) {
+            if(o1.weight > o2.weight){
+                return -1;
+            }else{
+                return 1;
+            }
+        }
+    });
     Library library = new Library();
     int id;
 
@@ -19,12 +29,16 @@ public class DS {
                 '}';
     }
 
-    public TreeSet<Integer> getBookSet() {
+    public TreeSet<Book> getBookSet() {
         return bookSet;
     }
 
     public Library getLibrary() {
         return library;
+    }
+
+    public void sortWeight(){
+
     }
 
     public void setLibStr(String libStr) {
@@ -42,14 +56,18 @@ public class DS {
         this.books = books;
         for (String s : books.split(" ")) {
             int i = Integer.parseInt(s);
-            bookSet.add(i);
+            Book book = new Book();
+            book.setId(i);
+            book.setWeight(Main.bookScoresMap.get(i));
+            bookSet.add(book);
         }
     }
 
+
     public long getTotalScore() {
         long sum = 0;
-        for (int i : bookSet) {
-            sum += Main.bookScoresMap.get(i);
+        for (Book i : bookSet) {
+            sum += Main.bookScoresMap.get(i.getWeight());
         }
         return sum;
     }
