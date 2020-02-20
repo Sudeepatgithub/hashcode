@@ -17,8 +17,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        File myObj = new File("text");
-        int B, L = 0, D;
+        File myObj = new File("b_read_on.txt");
+        int B, L = 0, D = 0;
         String bookScores = "";
         int counter = 0;
         Map<Integer, DS> libraryMap = new HashMap<>(L);
@@ -31,11 +31,13 @@ public class Main {
                     L = Integer.parseInt(data.split(" ")[1]);
                     D = Integer.parseInt(data.split(" ")[2]);
                     counter++;
-                } else if (counter == 1) {
+                }
+                else if (counter == 1) {
                     String data = myReader.nextLine();
                     bookScores = data;
                     counter++;
-                } else {
+                }
+                else {
                     break;
                 }
             }
@@ -48,7 +50,8 @@ public class Main {
                 libraryMap.put(counter++, ds);
                 ds.id = counter - 1;
             }
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -67,39 +70,50 @@ public class Main {
 
             if (score1 > score2) {
                 return 1;
-            } else {
+            }
+            else {
                 return -1;
             }
         });
 
+        int tempCount = D;
+        List<DS> copyList = new ArrayList<>();
+
+        for(int i=0;i<dsList.size();i++){
+            DS item = dsList.get(i);
+            tempCount -= item.library.setupTime;
+            if(tempCount >=0){
+                copyList.add(item);
+            }
+        }
+
         String result = "";
 
-        dsList.forEach(System.out::println);
-        System.out.println(dsList.size());
-        int tdays = 7, remDays = 0;
+        //dsList.forEach(System.out::println);
+        result += copyList.size() + "\n";
+        int tdays = D, remDays = 0;
         Set<Book> processedBooks = new HashSet<>();
-        for (int i = 0; i < dsList.size() && tdays >=0; i++) {
-            DS item = dsList.get(i);
+        for (int i = 0; i < copyList.size(); i++) {
+            DS item = copyList.get(i);
             item.removeProcessed(processedBooks);
-            System.out.println(item.id + " " + Math
-                    .min(((tdays - item.library.setupTime) * item.library.daily), item.bookSet.size()));
+            result+= item.id + " " + Math
+                    .min(((tdays - item.library.setupTime) * item.library.daily), item.bookSet.size())+"\n";
             tdays -= item.library.setupTime;
 
             for (Book book : item.bookSet) {
                 if (processedBooks.add(book)) {
                     String s = book.id + " ";
-                    System.out.print(s);
+                    result+= s ;
                 }
             }
 
-
-            System.out.println();
+            result+="\n";
         }
 
-        try(FileWriter fileWriter = new FileWriter("./output")) {
-            String fileContent = "This is a sample text.";
-            fileWriter.write(fileContent);
-        } catch (IOException e) {
+        try (FileWriter fileWriter = new FileWriter("./output")) {
+            fileWriter.write(result);
+        }
+        catch (IOException e) {
             // exception handling
         }
 
@@ -107,7 +121,7 @@ public class Main {
     }
 
     static HashMap<Integer, Integer> buildBookMap(String scores) {
-        String str[] = scores.split(" ");
+        String[] str = scores.split(" ");
         HashMap<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < str.length; i++) {
             map.put(i, Integer.valueOf(str[i]));
