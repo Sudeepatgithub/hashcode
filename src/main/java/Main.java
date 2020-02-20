@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -70,20 +72,38 @@ public class Main {
             }
         });
 
+        String result = "";
+
         dsList.forEach(System.out::println);
         System.out.println(dsList.size());
         int tdays = 7, remDays = 0;
         Set<Book> processedBooks = new HashSet<>();
-        dsList.forEach(item -> {
+        for (int i = 0; i < dsList.size() && tdays >=0; i++) {
+            DS item = dsList.get(i);
             item.removeProcessed(processedBooks);
             System.out.println(item.id + " " + Math
                     .min(((tdays - item.library.setupTime) * item.library.daily), item.bookSet.size()));
-            item.bookSet.stream().filter(book -> processedBooks.add(book)).map(book -> book.id + " ")
-                    .forEachOrdered(System.out::print);
+            tdays -= item.library.setupTime;
+
+            for (Book book : item.bookSet) {
+                if (processedBooks.add(book)) {
+                    String s = book.id + " ";
+                    System.out.print(s);
+                }
+            }
 
 
             System.out.println();
-        });
+        }
+
+        try(FileWriter fileWriter = new FileWriter("./output")) {
+            String fileContent = "This is a sample text.";
+            fileWriter.write(fileContent);
+        } catch (IOException e) {
+            // exception handling
+        }
+
+
     }
 
     static HashMap<Integer, Integer> buildBookMap(String scores) {
