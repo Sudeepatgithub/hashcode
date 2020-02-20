@@ -1,16 +1,18 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
 
-    public static HashMap<Integer,Integer> bookScoresMap = new HashMap<>();
+    public static HashMap<Integer, Integer> bookScoresMap = new HashMap<>();
+
     public static void main(String[] args) {
 
         File myObj = new File("text");
@@ -27,13 +29,11 @@ public class Main {
                     L = Integer.parseInt(data.split(" ")[1]);
                     D = Integer.parseInt(data.split(" ")[2]);
                     counter++;
-                }
-                else if (counter == 1) {
+                } else if (counter == 1) {
                     String data = myReader.nextLine();
                     bookScores = data;
                     counter++;
-                }
-                else {
+                } else {
                     break;
                 }
             }
@@ -44,29 +44,28 @@ public class Main {
                 ds.setLibStr(myReader.nextLine());
                 ds.setBooks(myReader.nextLine());
                 libraryMap.put(counter++, ds);
-                ds.id = counter-1;
+                ds.id = counter - 1;
             }
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
         Iterator<Integer> iterator = libraryMap.keySet().iterator();
         List<DS> dsList = new ArrayList<>();
 
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             int key = iterator.next();
-            DS ds= libraryMap.get(key);
+            DS ds = libraryMap.get(key);
             dsList.add(ds);
         }
 
         dsList.sort((o1, o2) -> {
-            long score1 = o1.library.noOfBooks/o1.library.daily;
-            long score2 = o2.library.noOfBooks/o2.library.daily;
+            long score1 = o1.library.noOfBooks / o1.library.daily;
+            long score2 = o2.library.noOfBooks / o2.library.daily;
 
-            if(score1 > score2){
+            if (score1 > score2) {
                 return 1;
-            }else{
+            } else {
                 return -1;
             }
         });
@@ -74,20 +73,25 @@ public class Main {
         dsList.forEach(System.out::println);
         System.out.println(dsList.size());
         int tdays = 7, remDays = 0;
+        Set<Book> processedBooks = new HashSet<>();
         dsList.forEach(item -> {
-            System.out.println(item.id +" "+ (tdays-item.library.setupTime)* item.library.daily);
-            System.out.println(item.bookSet);
+            item.removeProcessed(processedBooks);
+            System.out.println(item.id + " " + Math
+                    .min(((tdays - item.library.setupTime) * item.library.daily), item.bookSet.size()));
+            item.bookSet.stream().filter(book -> processedBooks.add(book)).map(book -> book.id + " ")
+                    .forEachOrdered(System.out::print);
+
+
+            System.out.println();
         });
-        
     }
 
-    static HashMap<Integer,Integer> buildBookMap(String scores){
+    static HashMap<Integer, Integer> buildBookMap(String scores) {
         String str[] = scores.split(" ");
-        HashMap<Integer,Integer>map = new HashMap<>();
-        for(int i=0;i<str.length;i++){
-           map.put(i, Integer.valueOf(str[i]));
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < str.length; i++) {
+            map.put(i, Integer.valueOf(str[i]));
         }
         return map;
-
     }
 }

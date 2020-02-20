@@ -1,4 +1,5 @@
 import java.util.Comparator;
+import java.util.Set;
 import java.util.TreeSet;
 
 public class DS {
@@ -8,9 +9,9 @@ public class DS {
     TreeSet<Book> bookSet = new TreeSet<>(new Comparator<Book>() {
         @Override
         public int compare(Book o1, Book o2) {
-            if(o1.weight > o2.weight){
+            if (o1.weight > o2.weight) {
                 return -1;
-            }else{
+            } else {
                 return 1;
             }
         }
@@ -37,7 +38,7 @@ public class DS {
         return library;
     }
 
-    public void sortWeight(){
+    public void sortWeight() {
 
     }
 
@@ -63,12 +64,15 @@ public class DS {
         }
     }
 
-
     public long getTotalScore() {
         long sum = 0;
         for (Book i : bookSet) {
             sum += Main.bookScoresMap.get(i.getWeight());
         }
         return sum;
+    }
+
+    public void removeProcessed(Set<Book> processedBooks) {
+        bookSet.removeAll(processedBooks);
     }
 }
