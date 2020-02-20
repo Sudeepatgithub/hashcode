@@ -1,6 +1,10 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -40,12 +44,36 @@ public class Main {
                 ds.setLibStr(myReader.nextLine());
                 ds.setBooks(myReader.nextLine());
                 libraryMap.put(counter++, ds);
+                ds.id = counter-1;
             }
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        System.out.println(libraryMap.get(1).getTotalScore());
+
+        Iterator<Integer> iterator = libraryMap.keySet().iterator();
+        List<DS> dsList = new ArrayList<>();
+
+        while(iterator.hasNext()){
+            int key = iterator.next();
+            DS ds= libraryMap.get(key);
+            dsList.add(ds);
+        }
+
+        dsList.sort((o1, o2) -> {
+            long score1 = o1.library.noOfBooks/o1.library.daily;
+            long score2 = o2.library.noOfBooks/o2.library.daily;
+
+            if(score1 > score2){
+                return 1;
+            }else{
+                return -1;
+            }
+        });
+
+        dsList.forEach(System.out::println);
+
+        
     }
 
     static HashMap<Integer,Integer> buildBookMap(String scores){

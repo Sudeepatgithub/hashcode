@@ -1,30 +1,37 @@
 public class Library {
 
-    long n,t,m;
+    long noOfBooks, setupTime, daily;
 
-
-
-    public long getN() {
-        return n;
+    public long getNoOfBooks() {
+        return noOfBooks;
     }
 
-    public void setN(long n) {
-        this.n = n;
+    public void setNoOfBooks(long noOfBooks) {
+        this.noOfBooks = noOfBooks;
     }
 
-    public long getT() {
-        return t;
+    public long getSetupTime() {
+        return setupTime;
     }
 
-    public void setT(long t) {
-        this.t = t;
+    public void setSetupTime(long setupTime) {
+        this.setupTime = setupTime;
     }
 
-    public long getM() {
-        return m;
+    public long getDaily() {
+        return daily;
     }
 
-    public void setM(long m) {
-        this.m = m;
+    public void setDaily(long daily) {
+        this.daily = daily;
+    }
+
+    @Override
+    public String toString() {
+        return "Library{" +
+                "noOfBooks=" + noOfBooks +
+                ", setupTime=" + setupTime +
+                ", daily=" + daily +
+                '}';
     }
 }
