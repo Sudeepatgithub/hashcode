@@ -17,7 +17,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        File myObj = new File("b_read_on.txt");
+        File myObj = new File("last.txt");
         int B, L = 0, D = 0;
         String bookScores = "";
         int counter = 0;
@@ -71,8 +71,10 @@ public class Main {
             if (score1 > score2) {
                 return 1;
             }
-            else {
+            else if(score1 < score2){
                 return -1;
+            }else{
+                return 0;
             }
         });
 
@@ -110,7 +112,7 @@ public class Main {
             result+="\n";
         }
 
-        try (FileWriter fileWriter = new FileWriter("./output")) {
+        try (FileWriter fileWriter = new FileWriter("./output2")) {
             fileWriter.write(result);
         }
         catch (IOException e) {
